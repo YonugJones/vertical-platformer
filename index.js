@@ -4,14 +4,36 @@ const ctx = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
+const scaledCanvas = {
+  width: canvas.width / 4,
+  hieght: canvas.height / 4
+}
+
 const gravity = 0.5
+
+class Sprite {
+  constructor({position, imageSrc}) {
+    this.position = position
+    this.image = new Image()
+    this.image.src = imageSrc
+  }
+
+  draw() {
+    if (!this.image) return
+    ctx.drawImage(this.image, this.position.x, this.position.y)
+  }
+
+  update() {
+    this.draw()
+  }
+}
 
 class Player {
   constructor(position) {
     this.position = position
     this.velocity = {
       x: 0,
-      y: 1, // the force of gravity!
+      y: 1
     }
     this.height = 100
   }
@@ -43,10 +65,25 @@ const player2 = new Player({
   y: 100,
 })
 
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0
+  },
+  imageSrc: './img/background.png'
+})
+
 function animate() {
   window.requestAnimationFrame(animate)
   ctx.fillStyle = 'white'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  ctx.save()
+  ctx.scale(4, 4)
+  ctx.translate(0, -background.image.height + scaledCanvas.hieght)
+  background.update()
+  ctx.restore()
+  
   player.update()
   player2.update()
 
