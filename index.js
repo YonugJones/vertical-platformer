@@ -54,13 +54,11 @@ platformCollisions2D.forEach((row, y) => {
 const gravity = 0.5
 
 const player = new Player({
-  x: 0,
-  y: 0,
-})
-
-const player2 = new Player({
-  x: 300,
-  y: 100,
+  position: {
+    x: 100,
+    y: 0,
+  },
+  collisionBlocks,
 })
 
 const background = new Sprite({
@@ -81,22 +79,21 @@ function animate() {
   ctx.translate(0, -background.image.height + scaledCanvas.hieght)
   background.update()
 
-  collisionBlocks.forEach(collisionBlock => {
-    collisionBlock.update() 
+  collisionBlocks.forEach((collisionBlock) => {
+    collisionBlock.update()
   })
 
-  platformCollisionBlocks.forEach(block => {
+  platformCollisionBlocks.forEach((block) => {
     block.update()
   })
 
-  ctx.restore()
-
   player.update()
-  player2.update()
 
   player.velocity.x = 0
   if (keys.d.pressed) player.velocity.x = 5
   else if (keys.a.pressed) player.velocity.x = -5
+
+  ctx.restore()
 }
 
 const keys = {
@@ -119,7 +116,7 @@ window.addEventListener('keydown', (event) => {
       keys.a.pressed = true
       break
     case 'w': // JUMP
-      player.velocity.y = -20
+      player.velocity.y = -8
       break
   }
 })
